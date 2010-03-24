@@ -1,0 +1,19 @@
+#Options +FollowSymLinks +ExecCGI
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  #If it's in the static directory then serve it.
+  RewriteCond %{REQUEST_URI} !^/static/(.+)$
+  #These files should be served directly
+  RewriteCond %{REQUEST_URI} !^/robots.txt$
+  RewriteCond %{REQUEST_URI} !^/favicon.ico$
+  # redirect to our front web controller
+  RewriteRule ^(.*)$ index.php?ygRoute=$1 [QSA,L]
+</IfModule>
+
+#there has been a major problem
+ErrorDocument 500 "<h2>Framework error</h2><p>Framework failed to start</p>"
+#this fudges directory listings from static to 404 errors
+ErrorDocument 403 /null
+#this fudges 404 errors to the framework
+ErrorDocument 404 /null
